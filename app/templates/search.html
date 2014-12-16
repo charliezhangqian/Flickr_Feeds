@@ -1,0 +1,21 @@
+<!-- extend base layout -->
+{% extends "base.html" %} 
+{% block content %}
+
+<h1 align="center">Flickr Public Feeds</h1>
+<form action="" method="post" name="login">
+    {{form.hidden_tag()}}
+    <p align="center">
+        Please enter your keywords below:<br>
+        (Seperate them with comma if there are more than one keywords)<br>
+        {{form.query(size=40)}}
+    </p>
+    <p align="center"><input type="submit" value="Search"></p>
+</form>
+{% if imgs %}
+	{% for img in imgs %}
+    	<a href="{{img[1]}}"><img src="{{img[0]}}"/></a>
+	{% endfor %}
+{% endif %}
+
+{% endblock %}
