@@ -4,18 +4,43 @@
 
 <h1 align="center">Flickr Public Feeds</h1>
 <form action="" method="post" name="login">
-    {{form.hidden_tag()}}
+    {{form1.hidden_tag()}}
     <p align="center">
         Please enter your keywords below:<br>
         (Seperate them with comma if there are more than one keywords)<br>
-        {{form.query(size=40)}}
+        {{form1.query(size=40)}}
     </p>
     <p align="center"><input type="submit" value="Search"></p>
 </form>
+<form action="" method="post" name="reviewForm">
+    <input type="submit" name= "review" value="View Liked Images"/>
+</form>
+{% if message %}
+<span style="color: green;">{{message}}</span>
+{% endif %}
 {% if imgs %}
 	{% for img in imgs %}
-    	<a href="{{img[1]}}"><img src="{{img[0]}}"/></a>
+    	<form action="" method="post" name="likeForm">
+            <input type="hidden" name="small" value="{{img[0]}}"/>
+            <input type="hidden" name="big" value="{{img[1]}}"/>
+            <div style="float:left; width: auto">
+                <a href="{{img[1]}}">
+            <img height="30%" src="{{img[0]}}"/></a>
+        <p align="center"><input type="submit" name="like" value="like"></p>
+    </div></form>
 	{% endfor %}
+{% endif %}
+{% if liked %}
+    {% for img in liked %}
+        <form action="" method="post" name="dislikeForm">
+            <input type="hidden" name="small" value="{{img['small']}}"/>
+            <input type="hidden" name="big" value="{{img['big']}}"/>
+            <div style="float:left; width: auto">
+                <a href="{{img['big']}}">
+            <img height="30%" src="{{img['small']}}"/></a>
+        <p align="center"><input type="submit" name="dislike" value="dislike"></p>
+    </div></form>
+    {% endfor %}
 {% endif %}
 
 {% endblock %}
