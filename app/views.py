@@ -4,6 +4,8 @@ from forms import SearchForm
 import httplib
 import re
 from app import mysql
+from search import searchWord
+
 
 #used for adding img url into database
 def LikeImage(smallURL, bigURL):
@@ -16,11 +18,11 @@ def LikeImage(smallURL, bigURL):
         conn.commit()
         cursor.close()
         print "INSERT"
-        return "This image is liked"
+        return "This image is liked!"
     else:
         cursor.close()
         print "already liked"
-        return "This image has already been liked"
+        return "This image has already been liked!"
 
 #used for querying liked images from database
 def reviewLiked():
@@ -48,20 +50,14 @@ def search():
     message = None
     if form1.validate_on_submit():
     	keywords = form1.query.data
-    	p = re.compile("\s")
-    	keywords = p.sub("",keywords) #remove the spaces in keywords
-    	conn = httplib.HTTPConnection("www.flickr.com")
-    	url = "http://api.flickr.com/services/feeds/photos_public.gne?tags="+keywords;
-    	conn.request("GET", url)  #send Http GET request to flickr web feeds
-    	response = conn.getresponse()
-        data = response.read();
-        p = re.compile("img src.*?(http.*?\.jpg).*?enclosure.*?(http.*?\.jpg)", re.S)  #parse the HTTP response
-        m = p.findall(data)
+    	  #parse the HTTP response
+        m = searchWord(keywords)
 
     elif request.form.get("like") != None:
         smallURL = request.form.get("small")
         bigURL = request.form.get("big")
         message = LikeImage(smallURL, bigURL)
+        return message
 
     elif request.form.get("review") != None:
         entries = reviewLiked()
